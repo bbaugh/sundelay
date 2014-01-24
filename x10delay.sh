@@ -1,8 +1,17 @@
 #!/bin/sh
+# WARNING!: This script assumes that suninfo.awk is contained within the same
+#           directory
+# Usage: x10delay.sh TOD EVT OFFSET HU X10CMD
+#        TOD - time of day: morning or evening
+#        EVT - celestial event time: sun or twilight
+#        OFFSET - offset in seconds from EVT when X10CMD will be issued.
+#        HU - X10 unit identification e.g. A1 or B12 where A/B are housecodes
+#             and 1 and 12 are unit codes
+#        X10CMD - type of command to issue using heyu interface.
 
 exedir=`dirname $0`
 
-if [ $# -ne 4 ]; then
+if [ $# -ne 5 ]; then
   echo "Need: time of day, event type, and unit code!"
   exit
 fi
@@ -20,6 +29,14 @@ if [ "${evt}" != "sun" ] && [ "${evt}" != "twilight" ]; then
   echo "Pick event: sun or twilight"
   exit
 fi
+
+
+offset="$3"
+if [ "${offset}" == "" ] ; then
+  echo "Please set OFFSET."
+  exit
+fi
+
 
 HU="$3"
 if [ "${HU}" == "" ] ; then
@@ -77,10 +94,10 @@ fi
 
 tnow=`date +%s`
 
-tdiff=$(( mtime - tnow ))
+tdiff=$(( mtime + offset - tnow  ))
 
 if [ ${tdiff} -gt 0 ]; then
-  sleep ${tdiff}
-  heyu ${x10cmd} ${HU}
-  #echo "${HU} ${x10cmd}"
+  echo "${HU} ${x10cmd} in ${tdiff}"
+  #sleep ${tdiff}
+  #heyu ${x10cmd} ${HU}
 fi
