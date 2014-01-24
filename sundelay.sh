@@ -1,18 +1,25 @@
 #!/bin/sh
 # WARNING!: This script assumes that suninfo.awk is contained within the same
 #           directory
-# Usage: x10delay.sh TOD EVT OFFSET HU X10CMD
+# Usage: sundelay.sh TOD EVT OFFSET EXECMD
 #        TOD - time of day: morning or evening
 #        EVT - celestial event time: sun or twilight
-#        OFFSET - offset in seconds from EVT when X10CMD will be issued.
-#        HU - X10 unit identification e.g. A1 or B12 where A/B are housecodes
-#             and 1 and 12 are unit codes
-#        X10CMD - type of command to issue using heyu interface.
-
+#        OFFSET - offset in seconds from EVT when EXECMD will be issued.
+#        EXECMD - command to execute.
+#
+# Edit file to:
+# * change the location of the stored sun info: sfile variable
+# * Set the lat and long to be used.
 exedir=`dirname $0`
 
-if [ $# -ne 5 ]; then
-  echo "Need: time of day, event type, and unit code!"
+sfile="/tmp/suninfo.xml"
+
+lat="38.913242"
+long="-77.009096"
+
+
+if [ $# -ne 4 ]; then
+  echo "Need: time of day, event type, and command!"
   exit
 fi
 
@@ -38,23 +45,11 @@ if [ "${offset}" == "" ] ; then
 fi
 
 
-HU="$4"
-if [ "${HU}" == "" ] ; then
-  echo "Pick HU: [A-Z][1-15]"
+execmd="$4"
+if [ "${execmd}" == "" ] ; then
+  echo "Set command to execute"
   exit
 fi
-
-x10cmd="$5"
-if [ "${x10cmd}" == "" ] ; then
-  echo "Pick X10 command: see heyu documentation"
-  exit
-fi
-
-
-sfile="/tmp/suninfo.xml"
-
-lat="38.913242"
-long="-77.009096"
 
 yr=`date +%Y`
 mon=`date +%m`
@@ -97,7 +92,6 @@ tnow=`date +%s`
 tdiff=$(( mtime + offset - tnow  ))
 
 if [ ${tdiff} -gt 0 ]; then
-  echo "${HU} ${x10cmd} in ${tdiff}"
-  #sleep ${tdiff}
-  #heyu ${x10cmd} ${HU}
+  #echo -e "Running:\n${execmd}\nin ${tdiff}"
+  sleep ${tdiff} && ${execmd}
 fi
