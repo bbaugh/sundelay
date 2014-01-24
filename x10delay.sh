@@ -38,13 +38,13 @@ if [ "${offset}" == "" ] ; then
 fi
 
 
-HU="$3"
+HU="$4"
 if [ "${HU}" == "" ] ; then
   echo "Pick HU: [A-Z][1-15]"
   exit
 fi
 
-x10cmd="$4"
+x10cmd="$5"
 if [ "${x10cmd}" == "" ] ; then
   echo "Pick X10 command: see heyu documentation"
   exit
