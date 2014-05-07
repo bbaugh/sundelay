@@ -18,7 +18,7 @@ lat="38.913242"
 long="-77.009096"
 
 
-if [ $# -ne 4 ]; then
+if [ $# -lt 4 ]; then
   echo "Need: time of day, event type, and command!"
   exit
 fi
@@ -44,11 +44,15 @@ if [ "${offset}" == "" ] ; then
   exit
 fi
 
-
 execmd="$4"
 if [ "${execmd}" == "" ] ; then
   echo "Set command to execute"
   exit
+fi
+
+donow="no"
+if [ $# -gt 4 ]; then
+  donow="$5"
 fi
 
 yr=`date +%Y`
@@ -94,4 +98,6 @@ tdiff=$(( mtime + offset - tnow  ))
 if [ ${tdiff} -gt 0 ]; then
   #echo -e "Running:\n${execmd}\nin ${tdiff}"
   sleep ${tdiff} && ${execmd}
+elif [ "${donow}" != "no" ]; then
+  ${execmd}
 fi
