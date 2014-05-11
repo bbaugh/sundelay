@@ -80,10 +80,10 @@ fi
 mtimehr=""
 if [ "${tod}" == "sun" ]; then
   mtimehr=`awk -f ${exedir}/suninfo.awk ${sfile} | grep -A 1 "^${tod}" | tail -1`
-  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr} ${dststr}" +%s`
+  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr}" +%s`
 elif [ "${tod}" != "twilight" ]; then
   mtimehr=`awk -f ${exedir}/suninfo.awk ${sfile} | grep -A 2 "^${tod}" | tail -1`
-  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr} ${dststr}" +%s`
+  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr}" +%s`
 fi
 
 if [ "${mtimehr}" == "" ]; then
