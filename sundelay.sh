@@ -68,7 +68,6 @@ fi
 
 # Only update info once a day
 if [ "${oday}" -ne "${day}" ]; then
-  echo "${oday} != ${day}"
   dststr=`date +%Z`
   dst=`echo ${dststr} | grep -c "DT" `
 
