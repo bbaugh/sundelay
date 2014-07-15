@@ -77,13 +77,13 @@ if [ "${oday}" -ne "${day}" ]; then
 fi
 
 mtimehr=""
-if [ "${tod}" == "sun" ]; then
+if [ "${evt}" == "sun" ]; then
   mtimehr=`awk -f ${exedir}/suninfo.awk ${sfile} | grep -A 1 "^${tod}" | tail -1`
-  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr}" +%s`
-elif [ "${tod}" != "twilight" ]; then
+elif [ "${evt}" != "twilight" ]; then
   mtimehr=`awk -f ${exedir}/suninfo.awk ${sfile} | grep -A 2 "^${tod}" | tail -1`
-  mtime=`date -d "${yr}-${mon}-${day} ${mtimehr}" +%s`
 fi
+
+mtime=`date -d "${yr}-${mon}-${day} ${mtimehr}" +%s`
 
 if [ "${mtimehr}" == "" ]; then
   echo "Didn't get time!"
